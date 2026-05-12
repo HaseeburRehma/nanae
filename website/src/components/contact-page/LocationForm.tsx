@@ -107,24 +107,24 @@ export function LocationForm() {
         </div>
 
         {/* Split row */}
-        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-7">
-          {/* Image with location card */}
+        <div className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-7">
+          {/* Image (the "Mein Standort" card is baked into the image itself) */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40"
+            className="relative aspect-[872/728] w-full overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40"
           >
-            <div className="relative aspect-[4/5] w-full sm:aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[560px]">
-              <Image
-                src="/images/contact/location.png"
-                alt="Nanae bei der Arbeit in Essen"
-                fill
-                sizes="(max-width: 1024px) 100vw, 600px"
-                className="object-cover"
-              />
-            </div>
+            <Image
+              src="/images/contact/location.png"
+              alt="Nanae bei der Arbeit in Essen"
+              fill
+              quality={95}
+              priority
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 620px"
+              className="object-cover object-center"
+            />
           </motion.div>
 
           {/* Form */}

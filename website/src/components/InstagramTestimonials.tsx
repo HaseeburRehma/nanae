@@ -194,7 +194,7 @@ export function InstagramTestimonials() {
                     ))}
                   </div>
                   <p className="mt-5 text-[15px] leading-relaxed text-ink">
-                    „{t.quote}"
+                    &bdquo;{t.quote}&ldquo;
                   </p>
                   <div className="mt-7 flex items-center gap-3 border-t border-ink-200/60 pt-5">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-light text-sm font-bold text-brand">
