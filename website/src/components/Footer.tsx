@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Facebook, Instagram, MessageCircle, Music2 } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 const LEISTUNGEN = [
   "Büroreinigung",
@@ -20,10 +20,11 @@ const ENTDECKEN = [
 ];
 
 const SOCIAL = [
-  { Icon: Facebook, href: "#", label: "Facebook" },
-  { Icon: MessageCircle, href: "https://wa.me/491XXXXXXXXX", label: "WhatsApp" },
-  { Icon: Instagram, href: "https://instagram.com/nanae_service", label: "Instagram" },
-  { Icon: Music2, href: "#", label: "TikTok" },
+  {
+    Icon: Instagram,
+    href: "https://www.instagram.com/nanae_service/",
+    label: "Instagram",
+  },
 ];
 
 export function Footer() {
@@ -138,8 +139,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-ink-200/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-ink-muted">
-            © {new Date().getFullYear()} Nanae · Reinigungsservice. Alle Rechte
-            vorbehalten.
+            © 2026 Nanae · Reinigungsservice. Alle Rechte vorbehalten.
           </p>
           <div className="flex gap-6 text-xs text-ink-muted">
             <a href="#" className="hover:text-brand">

@@ -16,12 +16,13 @@ export function ContactHero() {
       {/* Image hero */}
       <div className="relative h-[320px] w-full sm:h-[380px] md:h-[440px] lg:h-[460px]">
         <Image
-          src="/images/contact/page-hero.png"
-          alt="Nanae Reinigungsservice"
+          src="/images/brand/11-vacuum-office-white.png"
+          alt="Nanae bei der Büroreinigung – Kontaktseite"
           fill
           priority
+          quality={95}
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/35 via-ink/45 to-ink/55" />
 

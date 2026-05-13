@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
 type FormValues = {
@@ -108,23 +108,41 @@ export function LocationForm() {
 
         {/* Split row */}
         <div className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-7">
-          {/* Image (the "Mein Standort" card is baked into the image itself) */}
+          {/* Image with location card overlay */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative aspect-[872/728] w-full overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40"
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40 sm:aspect-[5/4] lg:aspect-[4/5]"
           >
             <Image
-              src="/images/contact/location.png"
-              alt="Nanae bei der Arbeit in Essen"
+              src="/images/brand/02-mop-office-blue.png"
+              alt="Nanae bei der Büroreinigung in Essen"
               fill
               quality={95}
               priority
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 620px"
               className="object-cover object-center"
             />
+
+            {/* Floating location card */}
+            <div className="absolute left-4 top-4 flex items-center gap-3 rounded-2xl bg-white/95 px-4 py-3 shadow-float ring-1 ring-black/5 backdrop-blur-sm sm:left-6 sm:top-6">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-light text-brand">
+                <MapPin className="h-4 w-4" />
+              </div>
+              <div className="leading-tight">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-ink-muted">
+                  Mein Standort
+                </div>
+                <div className="mt-0.5 text-sm font-extrabold text-ink">
+                  Essen, Deutschland
+                </div>
+                <div className="text-xs text-ink-muted">
+                  Service-Radius: 30 km
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           {/* Form */}

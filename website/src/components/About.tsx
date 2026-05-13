@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Check, Clock, Heart } from "lucide-react";
+import { Check, Clock, Heart, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 
 const FEATURES = [
@@ -36,13 +36,25 @@ export function About() {
         >
           <div className="relative aspect-[5/6] w-full max-w-[520px] overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
             <Image
-              src="/images/about/about.png"
-              alt="Nanae bei der Fensterreinigung"
+              src="/images/brand/03-window-squeegee.png"
+              alt="Nanae bei der Fensterreinigung mit Abzieher"
               fill
               quality={95}
               sizes="(max-width: 1024px) 100vw, 520px"
-              className="object-cover"
+              className="object-cover object-center"
             />
+          </div>
+
+          {/* Quote card overlay */}
+          <div className="absolute bottom-6 left-6 right-6 z-10 max-w-[360px] rounded-2xl bg-white p-5 shadow-float ring-1 ring-black/5 sm:left-10 sm:p-6">
+            <Quote className="h-5 w-5 text-brand" aria-hidden />
+            <p className="mt-2 text-sm font-medium leading-relaxed text-ink sm:text-[15px]">
+              Ich tue genau das, was ich versprochen habe – nicht weniger, nicht
+              mehr.
+            </p>
+            <p className="mt-3 text-xs text-ink-muted">
+              Foto: Nanae · echtes Bild
+            </p>
           </div>
         </motion.div>
 

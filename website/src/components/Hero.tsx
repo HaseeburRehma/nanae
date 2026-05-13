@@ -11,11 +11,26 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const HERO_IMAGES = [
-  { src: "/images/hero/hero-1.png", alt: "Nanae bei der Büroreinigung" },
-  { src: "/images/hero/hero-2.png", alt: "Nanae Reinigungsservice in Aktion" },
-  { src: "/images/hero/hero-3.png", alt: "Detailgenaue Reinigungsarbeit" },
-  { src: "/images/hero/hero-4.png", alt: "Praxis- und Klinikreinigung" },
-  { src: "/images/hero/hero-5.png", alt: "Sauberes Treppenhaus durch Nanae" },
+  {
+    src: "/images/brand/01-mop-office-white.png",
+    alt: "Nanae wischt einen Büroboden – professionelle Büroreinigung",
+  },
+  {
+    src: "/images/brand/10-vacuum-office-blue.png",
+    alt: "Nanae beim Staubsaugen im Büro",
+  },
+  {
+    src: "/images/brand/03-window-squeegee.png",
+    alt: "Streifenfreie Fensterreinigung mit Abzieher",
+  },
+  {
+    src: "/images/brand/09-medical-chairs.png",
+    alt: "Hygienische Reinigung im Wartezimmer einer Praxis",
+  },
+  {
+    src: "/images/brand/05-stairwell-mop.png",
+    alt: "Treppenhausreinigung – sauberer Empfang",
+  },
 ];
 
 const fadeUp = {
@@ -115,7 +130,11 @@ export function Hero() {
           >
             <Stat value="100%" label="ehrliche Arbeit" />
             <div className="hidden w-px self-stretch bg-ink-200/70 sm:block" />
-            <Stat value="@nanae_service" label="auf Instagram folgen" />
+            <Stat
+              value="@nanae_service"
+              label="auf Instagram folgen"
+              href="https://www.instagram.com/nanae_service/"
+            />
             <div className="hidden w-px self-stretch bg-ink-200/70 sm:block" />
             <Stat value="< 24 Std" label="schnelle Antwort" />
           </motion.div>
@@ -153,6 +172,22 @@ export function Hero() {
                 </SwiperSlide>
               ))}
             </Swiper>
+
+            {/* Floating availability card */}
+            <div className="pointer-events-none absolute bottom-5 left-5 z-10 inline-flex select-none items-center gap-3 rounded-2xl bg-white/95 px-4 py-2.5 shadow-float ring-1 ring-black/5 backdrop-blur-sm sm:bottom-6 sm:left-6 sm:px-5 sm:py-3">
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-pulseDot rounded-full bg-success opacity-70" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
+              </span>
+              <div className="leading-tight">
+                <div className="text-[13px] font-semibold text-ink sm:text-sm">
+                  Verfügbar diese Woche
+                </div>
+                <div className="text-[11px] text-ink-muted sm:text-xs">
+                  &lt; 24 Std Antwort
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -160,15 +195,35 @@ export function Hero() {
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="min-w-[90px]">
-      <div className="text-[17px] font-extrabold leading-tight tracking-tight text-ink sm:text-lg">
+function Stat({
+  value,
+  label,
+  href,
+}: {
+  value: string;
+  label: string;
+  href?: string;
+}) {
+  const content = (
+    <>
+      <div className="text-[17px] font-extrabold leading-tight tracking-tight text-ink transition-colors sm:text-lg">
         {value}
       </div>
       <div className="mt-1 text-xs leading-tight text-ink-muted sm:text-[13px]">
         {label}
       </div>
-    </div>
+    </>
+  );
+  return href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="group min-w-[90px] hover:[&_div:first-child]:text-brand"
+    >
+      {content}
+    </a>
+  ) : (
+    <div className="min-w-[90px]">{content}</div>
   );
 }

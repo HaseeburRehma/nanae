@@ -42,8 +42,8 @@ export function Navbar() {
     >
       <div className="container-x flex h-[76px] items-center justify-between sm:h-[84px]">
         <Link
-          href="#top"
-          aria-label="Nanae Reinigungsservice"
+          href="/"
+          aria-label="Nanae Reinigungsservice — zur Startseite"
           className="flex shrink-0 items-center"
         >
           <Image

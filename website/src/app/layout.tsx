@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: "Nanae Reinigungsservice",
     images: [
       {
-        url: "/images/hero/hero-1.png",
+        url: "/images/brand/01-mop-office-white.png",
         width: 1200,
         height: 800,
         alt: "Nanae Reinigungsservice",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "Nanae Reinigungsservice — ehrlich, zuverlässig, persönlich",
     description:
       "Reinigungsservice in Essen & Umgebung. Persönlich, gewissenhaft, ehrlich.",
-    images: ["/images/hero/hero-1.png"],
+    images: ["/images/brand/01-mop-office-white.png"],
   },
   robots: {
     index: true,
@@ -79,7 +79,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "Nanae Reinigungsservice",
-    image: `${SITE_URL}/images/hero/hero-1.png`,
+    image: `${SITE_URL}/images/brand/01-mop-office-white.png`,
     "@id": SITE_URL,
     url: SITE_URL,
     telephone: "+49 1XX XXX XX XX",
