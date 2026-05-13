@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Star } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,14 +8,16 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const IG_IMAGES = [
-  "/images/instagram/ig-1.png",
-  "/images/instagram/ig-2.png",
-  "/images/instagram/ig-3.png",
-  "/images/instagram/ig-4.png",
-  "/images/instagram/ig-5.png",
-  "/images/instagram/ig-6.png",
-  "/images/instagram/ig-7.png",
+/**
+ * Add new Instagram post IDs here as Nanae posts them.
+ * A post ID is the slug between `/p/` and the next `/` in the URL.
+ * e.g. https://www.instagram.com/p/DYM1hheSJVm/ → "DYM1hheSJVm"
+ */
+const IG_POSTS = [
+  "DYM1hheSJVm",
+  "DYM1hheSJVm",
+  "DYM1hheSJVm",
+  "DYM1hheSJVm",
 ];
 
 const TESTIMONIALS = [
@@ -58,9 +59,6 @@ const TESTIMONIALS = [
 ];
 
 export function InstagramTestimonials() {
-  // Duplicate images for seamless marquee
-  const marqueeImages = [...IG_IMAGES, ...IG_IMAGES];
-
   return (
     <section
       id="referenzen"
@@ -115,31 +113,53 @@ export function InstagramTestimonials() {
             <ArrowRight className="h-4 w-4" />
           </motion.a>
         </div>
-      </div>
 
-      {/* Marquee carousel (full-bleed) — square tiles with top-anchored crop
-          so the baked-in cards at the bottom of source images stay hidden */}
-      <div className="relative mt-12 select-none">
-        <div className="marquee-track gap-5 px-5">
-          {marqueeImages.map((src, idx) => (
-            <div
-              key={`${src}-${idx}`}
-              className="relative h-[220px] w-[220px] shrink-0 overflow-hidden rounded-2xl shadow-card ring-1 ring-ink-200/60 sm:h-[260px] sm:w-[260px]"
-            >
-              <Image
-                src={src}
-                alt="Nanae Instagram Beitrag"
-                fill
-                sizes="(max-width: 640px) 220px, 260px"
-                className="object-cover object-top scale-[1.25]"
-              />
-            </div>
-          ))}
-        </div>
+        {/* Live Instagram embed slider */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6 }}
+          className="mt-12 instagram-swiper"
+        >
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            slidesPerView={1}
+            spaceBetween={20}
+            loop={IG_POSTS.length > 1}
+            autoplay={{
+              delay: 5500,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            pagination={{ clickable: true }}
+            breakpoints={{
+              640: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
+            }}
+            className="!pb-12"
+          >
+            {IG_POSTS.map((id, idx) => (
+              <SwiperSlide key={`${id}-${idx}`} className="!h-auto">
+                <div className="mx-auto h-[560px] w-full max-w-[400px] overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-ink-200/50 sm:h-[600px]">
+                  <iframe
+                    src={`https://www.instagram.com/p/${id}/embed/?cr=1&v=14`}
+                    title={`Instagram Beitrag ${id}`}
+                    className="h-full w-full"
+                    loading="lazy"
+                    allow="encrypted-media; clipboard-write; picture-in-picture; web-share"
+                    scrolling="no"
+                    frameBorder="0"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </motion.div>
       </div>
 
       {/* Testimonials slider */}
-      <div className="container-x mt-24">
+      <div className="container-x mt-20">
         <div className="flex flex-col items-center text-center">
           <motion.span
             initial={{ opacity: 0, y: 12 }}

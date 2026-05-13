@@ -11,19 +11,16 @@ import {
   Instagram,
 } from "lucide-react";
 
-/**
- * Zod schema kept for typing + (optional) future server-side validation.
- * Client-side validation uses react-hook-form's built-in rules so no extra
- * resolver dependency is required.
- */
+/** Only the first four fields are required. The rest are optional. */
 const schema = z.object({
-  name: z.string().min(2),
-  phone: z.string().min(5),
-  email: z.string().email(),
-  city: z.string().min(2),
-  cleaningType: z.string().min(1),
-  area: z.string().min(1),
-  frequency: z.string().min(1),
+  firstName: z.string().trim().min(2),
+  lastName: z.string().trim().min(2),
+  email: z.string().trim().email(),
+  phone: z.string().trim().min(5),
+  city: z.string().optional(),
+  cleaningType: z.string().optional(),
+  area: z.string().optional(),
+  frequency: z.string().optional(),
   preferredDate: z.string().optional(),
   notes: z.string().optional(),
   privacy: z.literal(true),
@@ -66,31 +63,41 @@ export function Contact() {
   } = useForm<FormValues>({
     mode: "onTouched",
     defaultValues: {
-      name: "",
-      phone: "",
+      firstName: "",
+      lastName: "",
       email: "",
+      phone: "",
       city: "",
       cleaningType: "",
       area: "",
       frequency: "",
       preferredDate: "",
       notes: "",
-      // privacy left undefined so the required rule triggers
     },
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
-    // Final safety net: validate with Zod before sending.
     const parsed = schema.safeParse(values);
     if (!parsed.success) {
-      toast.error("Bitte alle Pflichtfelder korrekt ausfüllen.");
+      toast.error("Bitte alle Pflichtfelder ausfüllen.");
       return;
     }
     try {
+      const payload = {
+        name: `${parsed.data.firstName} ${parsed.data.lastName}`.trim(),
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        city: parsed.data.city,
+        cleaningType: parsed.data.cleaningType,
+        area: parsed.data.area,
+        frequency: parsed.data.frequency,
+        preferredDate: parsed.data.preferredDate,
+        message: parsed.data.notes,
+      };
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...parsed.data, message: parsed.data.notes }),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {
@@ -201,7 +208,15 @@ export function Contact() {
             Anfrage senden
           </h3>
           <p className="mt-1.5 text-sm text-ink-muted">
-            Felder mit * sind Pflichtfelder. Antwort innerhalb von 24h.
+            Pflichtfelder: Name, E-Mail, Telefon. Der Rest ist optional. Antwort
+            innerhalb von 24h an{" "}
+            <a
+              href="mailto:info@nanae.de"
+              className="font-medium text-brand underline"
+            >
+              info@nanae.de
+            </a>
+            .
           </p>
 
           <form
@@ -209,14 +224,41 @@ export function Contact() {
             className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
             noValidate
           >
-            <Field label="Vor- und Nachname *" error={errors.name?.message}>
+            <Field label="Vorname *" error={errors.firstName?.message}>
               <input
                 type="text"
-                placeholder="z. B. Max Mustermann"
+                placeholder="Max"
                 className="input-base"
-                {...register("name", {
-                  required: "Bitte Vor- und Nachname eingeben.",
+                {...register("firstName", {
+                  required: "Bitte Vornamen eingeben.",
                   minLength: { value: 2, message: "Mindestens 2 Zeichen." },
+                })}
+              />
+            </Field>
+
+            <Field label="Nachname *" error={errors.lastName?.message}>
+              <input
+                type="text"
+                placeholder="Mustermann"
+                className="input-base"
+                {...register("lastName", {
+                  required: "Bitte Nachnamen eingeben.",
+                  minLength: { value: 2, message: "Mindestens 2 Zeichen." },
+                })}
+              />
+            </Field>
+
+            <Field label="E-Mail *" error={errors.email?.message}>
+              <input
+                type="email"
+                placeholder="name@example.de"
+                className="input-base"
+                {...register("email", {
+                  required: "Bitte E-Mail eingeben.",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Bitte gültige E-Mail.",
+                  },
                 })}
               />
             </Field>
@@ -240,47 +282,22 @@ export function Contact() {
               />
             </Field>
 
-            <Field label="E-Mail *" error={errors.email?.message}>
-              <input
-                type="email"
-                placeholder="name@example.de"
-                className="input-base"
-                {...register("email", {
-                  required: "Bitte E-Mail eingeben.",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Bitte gültige E-Mail eingeben.",
-                  },
-                })}
-              />
-            </Field>
-
-            <Field label="Stadt / Stadtteil *" error={errors.city?.message}>
+            <Field label="Stadt / Stadtteil">
               <input
                 type="text"
                 placeholder="Hamburg, Altona…"
                 className="input-base"
-                {...register("city", {
-                  required: "Bitte Stadt eingeben.",
-                  minLength: { value: 2, message: "Mindestens 2 Zeichen." },
-                })}
+                {...register("city")}
               />
             </Field>
 
-            <Field
-              label="Art der Reinigung *"
-              error={errors.cleaningType?.message}
-            >
+            <Field label="Art der Reinigung">
               <select
                 className="input-base"
-                {...register("cleaningType", {
-                  required: "Bitte Art der Reinigung wählen.",
-                })}
+                {...register("cleaningType")}
                 defaultValue=""
               >
-                <option value="" disabled>
-                  Bitte auswählen
-                </option>
+                <option value="">Bitte auswählen</option>
                 <option value="bueroreinigung">Büroreinigung</option>
                 <option value="wohnungsreinigung">Wohnungsreinigung</option>
                 <option value="fensterreinigung">Fensterreinigung</option>
@@ -290,15 +307,13 @@ export function Contact() {
               </select>
             </Field>
 
-            <Field label="Größe der Fläche *" error={errors.area?.message}>
+            <Field label="Größe der Fläche">
               <select
                 className="input-base"
-                {...register("area", { required: "Bitte Größe wählen." })}
+                {...register("area")}
                 defaultValue=""
               >
-                <option value="" disabled>
-                  z. B. 50–100 m²
-                </option>
+                <option value="">z. B. 50–100 m²</option>
                 <option value="<50">unter 50 m²</option>
                 <option value="50-100">50–100 m²</option>
                 <option value="100-200">100–200 m²</option>
@@ -307,17 +322,13 @@ export function Contact() {
               </select>
             </Field>
 
-            <Field label="Häufigkeit *" error={errors.frequency?.message}>
+            <Field label="Häufigkeit">
               <select
                 className="input-base"
-                {...register("frequency", {
-                  required: "Bitte Häufigkeit wählen.",
-                })}
+                {...register("frequency")}
                 defaultValue=""
               >
-                <option value="" disabled>
-                  Einmalig / Wöchentlich…
-                </option>
+                <option value="">Einmalig / Wöchentlich…</option>
                 <option value="einmalig">Einmalig</option>
                 <option value="woechentlich">Wöchentlich</option>
                 <option value="14taegig">Alle 2 Wochen</option>
@@ -325,7 +336,7 @@ export function Contact() {
               </select>
             </Field>
 
-            <Field label="Wunschtermin" error={errors.preferredDate?.message}>
+            <Field label="Wunschtermin">
               <input
                 type="date"
                 placeholder="TT.MM.JJJJ"
@@ -335,10 +346,7 @@ export function Contact() {
             </Field>
 
             <div className="sm:col-span-2">
-              <Field
-                label="Anmerkungen (optional)"
-                error={errors.notes?.message}
-              >
+              <Field label="Anmerkungen (optional)">
                 <textarea
                   rows={4}
                   placeholder="Erzähl mir kurz, was du brauchst – Räume, Besonderheiten, gewünschte Zeiten…"

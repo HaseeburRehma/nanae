@@ -117,7 +117,7 @@ export function Hero() {
             <div className="hidden w-px self-stretch bg-ink-200/70 sm:block" />
             <Stat value="@nanae_service" label="auf Instagram folgen" />
             <div className="hidden w-px self-stretch bg-ink-200/70 sm:block" />
-            <Stat value="<  Std" label="schnelle Antwort" />
+            <Stat value="< 24 Std" label="schnelle Antwort" />
           </motion.div>
         </div>
 
@@ -145,7 +145,8 @@ export function Hero() {
                     src={img.src}
                     alt={img.alt}
                     fill
-                    sizes="(max-width: 1024px) 100vw, 600px"
+                    quality={95}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 620px"
                     priority={idx === 0}
                     className="object-cover object-center"
                   />

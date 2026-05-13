@@ -121,17 +121,20 @@ body {
   border-radius: 9999px !important;
 }
 
-/* Testimonials slider — dark dots on light background */
+/* Instagram embed slider — dark dots on light background */
+.instagram-swiper .swiper-pagination,
 .testimonials-swiper .swiper-pagination {
   position: relative !important;
   bottom: 0 !important;
   margin-top: 8px;
 }
-.testimonials-swiper .swiper-pagination-bullet {
+.testimonials-swiper .swiper-pagination-bullet,
+.instagram-swiper .swiper-pagination-bullet {
   background-color: rgba(15, 23, 42, 0.18) !important;
   box-shadow: none;
 }
-.testimonials-swiper .swiper-pagination-bullet-active {
+.testimonials-swiper .swiper-pagination-bullet-active,
+.instagram-swiper .swiper-pagination-bullet-active {
   background-color: rgba(0, 104, 155, 1) !important;
 }
 

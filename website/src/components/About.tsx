@@ -39,6 +39,7 @@ export function About() {
               src="/images/about/about.png"
               alt="Nanae bei der Fensterreinigung"
               fill
+              quality={95}
               sizes="(max-width: 1024px) 100vw, 520px"
               className="object-cover"
             />
