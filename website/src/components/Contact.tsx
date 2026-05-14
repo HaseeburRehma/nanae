@@ -30,9 +30,9 @@ type FormValues = z.infer<typeof schema>;
 const CONTACT_CARDS = [
   {
     title: "WhatsApp",
-    value: "+49 1XX XXX XX XX",
+    value: "+49 1521 0692909",
     desc: "Schnellste Antwort, meist sofort.",
-    href: "https://wa.me/491XXXXXXXXX",
+    href: "https://wa.me/4915210692909",
     icon: MessageCircle,
     dotColor: "bg-success",
   },
@@ -269,7 +269,7 @@ export function Contact() {
             >
               <input
                 type="tel"
-                placeholder="+49 1XX XXX XX XX"
+                placeholder="+49 1521 0692909"
                 className="input-base"
                 {...register("phone", {
                   required: "Bitte Telefonnummer eingeben.",

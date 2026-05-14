@@ -107,7 +107,7 @@ export function Hero() {
               <ArrowRight className="h-4 w-4" />
             </a>
             <a
-              href="https://wa.me/491XXXXXXXXX"
+              href="https://wa.me/4915210692909"
               target="_blank"
               rel="noreferrer"
               className="btn-secondary"

@@ -73,10 +73,10 @@ export function ContactHero() {
             kind="default"
             label="Anrufen"
             icon={<MessageCircle className="h-5 w-5" />}
-            value="+49 1XX XXX XX XX"
+            value="+49 1521 0692909"
             desc="Direkt, persönlich und ohne Umwege. Mo–Sa, 8:00 – 19:00 Uhr."
             cta="Jetzt anrufen"
-            href="tel:+491XXXXXXXXX"
+            href="tel:+4915210692909"
           />
           <ContactCard
             kind="default"

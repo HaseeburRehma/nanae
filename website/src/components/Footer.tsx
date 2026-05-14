@@ -119,10 +119,10 @@ export function Footer() {
                   WhatsApp
                 </div>
                 <a
-                  href="https://wa.me/491XXXXXXXXX"
+                  href="https://wa.me/4915210692909"
                   className="font-semibold text-ink hover:text-brand"
                 >
-                  +49 1XX XXX XX XX
+                  +49 1521 0692909
                 </a>
               </li>
               <li>

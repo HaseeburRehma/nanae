@@ -82,7 +82,7 @@ export default function RootLayout({
     image: `${SITE_URL}/images/brand/01-mop-office-white.png`,
     "@id": SITE_URL,
     url: SITE_URL,
-    telephone: "+49 1XX XXX XX XX",
+    telephone: "+49 1521 0692909",
     email: "info@nanae.de",
     priceRange: "€€",
     address: {

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,17 @@ const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      router.push("/");
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -43,6 +55,7 @@ export function Navbar() {
       <div className="container-x flex h-[76px] items-center justify-between sm:h-[84px]">
         <Link
           href="/"
+          onClick={goHome}
           aria-label="Nanae Reinigungsservice — zur Startseite"
           className="flex shrink-0 items-center"
         >

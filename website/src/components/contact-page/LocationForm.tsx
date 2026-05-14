@@ -205,7 +205,7 @@ export function LocationForm() {
               <Field label="Telefon (optional)" error={errors.phone?.message}>
                 <input
                   type="tel"
-                  placeholder="+49 1XX XXX XX XX"
+                  placeholder="+49 1521 0692909"
                   className="input-base"
                   {...register("phone", {
                     pattern: {
