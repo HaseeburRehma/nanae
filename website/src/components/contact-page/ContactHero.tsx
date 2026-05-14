@@ -16,8 +16,8 @@ export function ContactHero() {
       {/* Image hero */}
       <div className="relative h-[320px] w-full sm:h-[380px] md:h-[440px] lg:h-[460px]">
         <Image
-          src="/images/brand/11-vacuum-office-white.png"
-          alt="Nanae bei der Büroreinigung – Kontaktseite"
+          src="/images/brand/05-stairwell-mop.png"
+          alt="Nanae bei der Treppenhausreinigung – Kontaktseite"
           fill
           priority
           quality={95}
