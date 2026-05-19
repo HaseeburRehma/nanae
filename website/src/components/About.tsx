@@ -25,41 +25,21 @@ const FEATURES = [
 export function About() {
   return (
     <section id="ueber-mich" className="bg-white section-padding">
-      <div className="container-x grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
-        {/* Image with quote overlay */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
-        >
-          <div className="relative aspect-[5/6] w-full max-w-[520px] overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
-            <Image
-              src="/images/brand/03-window-squeegee.png"
-              alt="Nanae bei der Fensterreinigung mit Abzieher"
-              fill
-              quality={95}
-              sizes="(max-width: 1024px) 100vw, 520px"
-              className="object-cover object-center"
-            />
-          </div>
+      {/*
+        Layout strategy
+        ───────────────
+        Mobile (single column, flex):
+          1. Pill + headline + paragraph
+          2. Image with quote overlay
+          3. Feature cards
 
-          {/* Quote card overlay */}
-          <div className="absolute bottom-6 left-6 right-6 z-10 max-w-[360px] rounded-2xl bg-white p-5 shadow-float ring-1 ring-black/5 sm:left-10 sm:p-6">
-            <Quote className="h-5 w-5 text-brand" aria-hidden />
-            <p className="mt-2 text-sm font-medium leading-relaxed text-ink sm:text-[15px]">
-              Ich tue genau das, was ich versprochen habe – nicht weniger, nicht
-              mehr.
-            </p>
-            <p className="mt-3 text-xs text-ink-muted">
-              Foto: Nanae · echtes Bild
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Text + Features */}
-        <div>
+        Desktop (≥ lg, two columns):
+          • Left column   → Image with quote overlay (full height, row-span-2)
+          • Right column  → Intro (pill + h2 + p) on top, feature cards below
+      */}
+      <div className="container-x grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-20">
+        {/* 1. Intro text — mobile order 1, desktop top-right */}
+        <div className="order-1 lg:order-2 lg:col-start-2">
           <motion.span
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -93,8 +73,44 @@ export function About() {
             sprichst direkt mit mir, und ich stehe für jedes Detail meiner
             Arbeit gerade.
           </motion.p>
+        </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {/* 2. Image with quote overlay — mobile order 2, desktop left column,
+              spanning both grid rows so it sits beside intro + features. */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="relative order-2 lg:order-1 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-center"
+        >
+          <div className="relative aspect-[5/6] w-full max-w-[520px] overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
+            <Image
+              src="/images/brand/03-window-squeegee.png"
+              alt="Nanae bei der Fensterreinigung mit Abzieher"
+              fill
+              quality={95}
+              sizes="(max-width: 1024px) 100vw, 520px"
+              className="object-cover object-center"
+            />
+          </div>
+
+          {/* Quote card overlay */}
+          <div className="absolute bottom-6 left-6 right-6 z-10 max-w-[360px] rounded-2xl bg-white p-5 shadow-float ring-1 ring-black/5 sm:left-10 sm:p-6">
+            <Quote className="h-5 w-5 text-brand" aria-hidden />
+            <p className="mt-2 text-sm font-medium leading-relaxed text-ink sm:text-[15px]">
+              Ich tue genau das, was ich versprochen habe – nicht weniger, nicht
+              mehr.
+            </p>
+            <p className="mt-3 text-xs text-ink-muted">
+              Foto: Nanae · echtes Bild
+            </p>
+          </div>
+        </motion.div>
+
+        {/* 3. Feature cards — mobile order 3, desktop right column row 2 */}
+        <div className="order-3 lg:order-3 lg:col-start-2 lg:row-start-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {FEATURES.map((feature, i) => (
               <motion.div
                 key={feature.title}
@@ -105,7 +121,10 @@ export function About() {
                 className="card-base p-5 ring-1 ring-ink-200/60 hover:-translate-y-1 hover:shadow-cardHover"
               >
                 <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-light text-brand">
-                  <feature.icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
+                  <feature.icon
+                    className="h-[18px] w-[18px]"
+                    strokeWidth={2.2}
+                  />
                 </div>
                 <h3 className="mt-4 text-[15px] font-semibold text-ink">
                   {feature.title}

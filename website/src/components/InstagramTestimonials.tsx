@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -107,11 +108,17 @@ function ReelEmbed({ url }: { url: string }) {
 export function InstagramTestimonials() {
   const [mounted, setMounted] = useState(false);
   const [reels, setReels] = useState<string[]>(FALLBACK_REELS);
+  // True while the user is actively watching one of the reels (iframe has
+  // focus). Used to pause autoplay so a sliding video isn't yanked away.
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const desktopSwiperRef = useRef<SwiperType | null>(null);
+  const mobileSwiperRef = useRef<SwiperType | null>(null);
+
+  // ---- 1. Load reels from API + mark mounted ----------------------------
   useEffect(() => {
     setMounted(true);
-    // Auto-update: pull the latest reels from /api/ig-reels.
-    // Falls back silently to FALLBACK_REELS if the API isn't configured.
     let cancelled = false;
     fetch("/api/ig-reels")
       .then((r) => (r.ok ? r.json() : null))
@@ -120,16 +127,70 @@ export function InstagramTestimonials() {
           setReels(data.reels);
         }
       })
-      .catch(() => {
-        // ignore — fallback already in state
-      });
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
   }, []);
 
+  // ---- 2. Detect when a reel iframe is being interacted with ------------
+  // Tapping/clicking a reel transfers focus to the cross-origin iframe,
+  // which fires a `blur` on the parent window. We treat that as
+  // "video is being watched" and pause autoplay until the user comes
+  // back (focus event on the parent window).
+  useEffect(() => {
+    if (!mounted) return;
+
+    const onBlur = () => {
+      // Defer one tick so `document.activeElement` is up to date
+      window.setTimeout(() => {
+        const active = document.activeElement as HTMLElement | null;
+        if (
+          active &&
+          active.tagName === "IFRAME" &&
+          sectionRef.current?.contains(active)
+        ) {
+          setIsVideoPlaying(true);
+        }
+      }, 0);
+    };
+
+    const onFocus = () => setIsVideoPlaying(false);
+
+    // Also resume when the user explicitly interacts with the page again
+    const onTouchStart = (e: TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && !target.closest("iframe")) {
+        setIsVideoPlaying(false);
+      }
+    };
+
+    window.addEventListener("blur", onBlur);
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    return () => {
+      window.removeEventListener("blur", onBlur);
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("touchstart", onTouchStart);
+    };
+  }, [mounted]);
+
+  // ---- 3. Pause / resume both Swiper instances based on play state ------
+  useEffect(() => {
+    const swipers = [desktopSwiperRef.current, mobileSwiperRef.current];
+    swipers.forEach((s) => {
+      if (!s?.autoplay) return;
+      if (isVideoPlaying) {
+        s.autoplay.stop();
+      } else {
+        s.autoplay.start();
+      }
+    });
+  }, [isVideoPlaying]);
+
   return (
     <section
+      ref={sectionRef}
       id="referenzen"
       className="overflow-hidden bg-white section-padding"
     >
@@ -183,7 +244,6 @@ export function InstagramTestimonials() {
           </motion.a>
         </div>
       </div>
-
       {/* Real Instagram embed iframes */}
       <div className="mt-12 bg-ink py-10 sm:py-14">
         <div className="container-x">
@@ -202,6 +262,9 @@ export function InstagramTestimonials() {
                     pauseOnMouseEnter: true,
                   }}
                   pagination={{ clickable: true }}
+                  onSwiper={(s) => {
+                    desktopSwiperRef.current = s;
+                  }}
                   breakpoints={{
                     768: { slidesPerView: 3, spaceBetween: 4 },
                     1024: { slidesPerView: 4, spaceBetween: 4 },
@@ -216,7 +279,6 @@ export function InstagramTestimonials() {
                   ))}
                 </Swiper>
               </div>
-
               {/* Mobile — single reel */}
               <div className="sm:hidden">
                 <Swiper
@@ -226,6 +288,9 @@ export function InstagramTestimonials() {
                   loop
                   autoplay={{ delay: 6000, disableOnInteraction: false }}
                   pagination={{ clickable: true }}
+                  onSwiper={(s) => {
+                    mobileSwiperRef.current = s;
+                  }}
                   className="instagram-swiper !pb-10"
                 >
                   {reels.map((url) => (
@@ -239,7 +304,6 @@ export function InstagramTestimonials() {
           )}
         </div>
       </div>
-
       {/* Testimonials slider — temporarily deactivated. */}
       {false && (
         <div className="container-x mt-20">
