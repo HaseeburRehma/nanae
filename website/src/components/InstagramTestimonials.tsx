@@ -245,7 +245,7 @@ export function InstagramTestimonials() {
         </div>
       </div>
       {/* Real Instagram embed iframes */}
-      <div className="mt-12 bg-ink py-10 sm:py-14">
+      <div className="mt-12">
         <div className="container-x">
           {mounted && (
             <>
