@@ -142,14 +142,11 @@ export function Footer() {
             © 2026 Nanae · Reinigungsservice. Alle Rechte vorbehalten.
           </p>
           <div className="flex gap-6 text-xs text-ink-muted">
-            <a href="#" className="hover:text-brand">
+            <a href="/impressum" className="hover:text-brand">
               Impressum
             </a>
-            <a href="#" className="hover:text-brand">
+            <a href="/datenschutz" className="hover:text-brand">
               Datenschutz
-            </a>
-            <a href="#" className="hover:text-brand">
-              AGB
             </a>
           </div>
         </div>

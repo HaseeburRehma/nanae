@@ -14,54 +14,71 @@ const SITE_URL = "https://nanae.de";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Nanae Reinigungsservice — ehrlich, zuverlässig, persönlich",
-    template: "%s · Nanae Reinigungsservice",
+    default:
+      "Nanae Reinigungsservice Essen – Büro, Wohnung, Fenster, Praxis & Treppenhaus",
+    template: "%s · Nanae Reinigungsservice Essen",
   },
   description:
-    "Reinigungsservice in Essen & Umgebung. Büro-, Wohnungs-, Fenster-, Grund-, Praxis- und Treppenhausreinigung. Persönlich, gewissenhaft, ehrlich — kein Callcenter, keine Subunternehmer.",
+    "Persönlicher Reinigungsservice in Essen & Umgebung. Büroreinigung, Wohnungsreinigung, Fensterreinigung, Grund-, Praxis- und Treppenhausreinigung – ehrlich, zuverlässig, gewissenhaft. Kostenlos anfragen.",
+  applicationName: "Nanae Reinigungsservice",
   keywords: [
     "Reinigungsservice Essen",
-    "Büroreinigung",
-    "Wohnungsreinigung",
-    "Fensterreinigung",
-    "Grundreinigung",
-    "Praxisreinigung",
-    "Treppenhausreinigung",
+    "Reinigungsfirma Essen",
+    "Gebäudereinigung Essen",
+    "Büroreinigung Essen",
+    "Wohnungsreinigung Essen",
+    "Fensterreinigung Essen",
+    "Grundreinigung Essen",
+    "Praxisreinigung Essen",
+    "Klinikreinigung Essen",
+    "Treppenhausreinigung Essen",
     "Nanae",
+    "Nana Efaba",
   ],
-  authors: [{ name: "Nanae" }],
+  authors: [{ name: "Nana Efaba", url: SITE_URL }],
   creator: "Nanae Reinigungsservice",
+  publisher: "Nanae Reinigungsservice",
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "de_DE",
     url: SITE_URL,
-    title: "Nanae Reinigungsservice — ehrlich, zuverlässig, persönlich",
+    title:
+      "Nanae Reinigungsservice Essen – ehrlich, zuverlässig, persönlich",
     description:
-      "Reinigungsservice in Essen & Umgebung. Persönlich, gewissenhaft, ehrlich.",
+      "Reinigungsservice in Essen & Umgebung. Büro, Wohnung, Fenster, Praxis, Treppenhaus. Persönlich, gewissenhaft, ehrlich.",
     siteName: "Nanae Reinigungsservice",
     images: [
       {
         url: "/images/brand/01-mop-office-white.png",
         width: 1200,
         height: 800,
-        alt: "Nanae Reinigungsservice",
+        alt: "Nanae Reinigungsservice – professionelle Büroreinigung in Essen",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nanae Reinigungsservice — ehrlich, zuverlässig, persönlich",
+    title:
+      "Nanae Reinigungsservice Essen – ehrlich, zuverlässig, persönlich",
     description:
-      "Reinigungsservice in Essen & Umgebung. Persönlich, gewissenhaft, ehrlich.",
+      "Reinigungsservice in Essen & Umgebung – Büro, Wohnung, Fenster, Praxis, Treppenhaus.",
     images: ["/images/brand/01-mop-office-white.png"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   icons: {
     icon: "/favicon.svg",
   },
+  category: "cleaning service",
 };
 
 export const viewport: Viewport = {

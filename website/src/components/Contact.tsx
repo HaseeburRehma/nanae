@@ -367,7 +367,12 @@ export function Contact() {
                 />
                 <span>
                   Ich habe die{" "}
-                  <a href="#" className="text-brand underline">
+                  <a
+                    href="/datenschutz"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-brand underline"
+                  >
                     Datenschutzerklärung
                   </a>{" "}
                   gelesen und akzeptiere.
