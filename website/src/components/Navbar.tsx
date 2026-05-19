@@ -30,10 +30,17 @@ export function Navbar() {
   };
 
   useEffect(() => {
+    // Defer to next frame so the first hydrated render matches the SSR
+    // markup (scrolled = false) even when the user is already scrolled.
+    const id = window.requestAnimationFrame(() => {
+      setScrolled(window.scrollY > 8);
+    });
     const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.cancelAnimationFrame(id);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {

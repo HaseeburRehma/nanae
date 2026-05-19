@@ -138,6 +138,46 @@ On Vercel: add the same three variables in **Project → Settings → Environmen
 - The mail is sent over `smtp.gmail.com:465` (SSL), with `replyTo` set to the visitor's email so you can reply directly from Gmail.
 - A nice HTML version of the message is generated; a plain-text fallback is included.
 
+## Instagram Reels — auto-update from Instagram
+
+The "Folge mir auf Instagram" strip pulls the **latest 6 reels** from `@nanae_service` automatically — new posts show up on the website without redeploying code.
+
+### How it works
+- `/api/ig-reels` (server route) calls the **Instagram Graph API** for the connected user's most recent media (filtered to `REELS` / `VIDEO`).
+- The response is cached at the Vercel edge for **1 hour** (`s-maxage=3600, stale-while-revalidate=86400`).
+- `InstagramTestimonials.tsx` fetches the list on mount; if the API returns reels it swaps the on-screen list in place.
+- If `IG_ACCESS_TOKEN` / `IG_USER_ID` are missing or the API call fails, the route returns a **hard-coded fallback list** so the strip never goes blank.
+
+### One-time Meta setup (~10 min)
+1. Make sure `@nanae_service` is a **Business/Creator** account (Profile → Settings → "For professionals" → Account type).
+2. Go to https://developers.facebook.com → **My Apps → Create App** → type "Business". Add the **Instagram Graph API** product.
+3. In Instagram, link the account to any Facebook Page (Meta requires this even for solo users).
+4. Open the **Graph API Explorer**, generate a token with scopes:
+   - `instagram_basic`
+   - `pages_show_list`
+   - `pages_read_engagement`
+5. Exchange the short-lived token for a **60-day long-lived token**:
+   ```
+   GET /oauth/access_token?
+     grant_type=ig_exchange_token&
+     client_secret=<APP_SECRET>&
+     access_token=<SHORT_LIVED>
+   ```
+6. Fetch the Instagram User ID:
+   ```
+   GET /me/accounts          → pick the connected page → note its page_id
+   GET /{page_id}?fields=instagram_business_account → returns the IG user id
+   ```
+7. Add to `.env.local` (and on Vercel: Project → Settings → Environment Variables):
+   ```env
+   IG_ACCESS_TOKEN=<long-lived token>
+   IG_USER_ID=<numeric ig business user id>
+   ```
+8. Redeploy. New reels you post on Instagram will appear on the site within an hour (or instantly after the next visitor triggers `stale-while-revalidate`).
+
+### Token refresh
+Long-lived tokens last **60 days**. Refresh manually or set a calendar reminder; the route gracefully falls back to the hard-coded list once a token expires.
+
 ## SEO & Performance
 
 - Per-page metadata + OpenGraph + Twitter card (`src/app/layout.tsx`).

@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Star } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
@@ -11,163 +10,122 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 /**
- * Instagram reels — each entry pairs a real reel URL with a local
- * thumbnail (from /public/images/brand/) shown as the card preview.
- * Clicking a card opens the reel on instagram.com in a new tab.
- *
- * To add a new reel:
- *   1. Push a new { url, thumb, caption } object into IG_REELS.
- *   2. Thumb path is relative to /public.
+ * Instagram reel permalinks. Add new reels by pushing a URL here.
+ * The embed iframe is derived from the slug between /reel/ (or /p/) and the
+ * next slash.
  */
-const IG_REELS = [
-  {
-    url: "https://www.instagram.com/nanae_service/reel/DYEBMbsMMYM/",
-    thumb: "/images/brand/01-mop-office-white.png",
-    caption: "Saubere Büros, ehrliche Arbeit.",
-  },
-  {
-    url: "https://www.instagram.com/nanae_service/reel/DYPu8-QsLtg/",
-    thumb: "/images/brand/03-window-squeegee.png",
-    caption: "Streifenfreie Fenster – jedes Mal.",
-  },
-  {
-    url: "https://www.instagram.com/nanae_service/reel/DYM1hheSJVm/",
-    thumb: "/images/brand/10-vacuum-office-blue.png",
-    caption: "Frisch gesaugt, sofort einsatzbereit.",
-  },
-  {
-    url: "https://www.instagram.com/enes_seker/reel/DXsGMtNDKP4/",
-    thumb: "/images/brand/09-medical-chairs.png",
-    caption: "Hygiene in der Praxis.",
-  },
-  {
-    url: "https://www.instagram.com/enes_seker/reel/DXbco_SDE_s/",
-    thumb: "/images/brand/07-bathroom-mirror.png",
-    caption: "Sanitärbereich glänzend sauber.",
-  },
-  {
-    url: "https://www.instagram.com/enes_seker/reel/DXfGWoZjOZv/",
-    thumb: "/images/brand/05-stairwell-mop.png",
-    caption: "Treppenhaus – Empfang für Gäste.",
-  },
+/**
+ * Hard-coded fallback list used while the page is still hydrating and
+ * before /api/ig-reels has resolved. Once the Graph API token is set in
+ * the env, the live list replaces this on mount.
+ */
+const FALLBACK_REELS = [
+  "https://www.instagram.com/nanae_service/reel/DYEBMbsMMYM/",
+  "https://www.instagram.com/nanae_service/reel/DYPu8-QsLtg/",
+  "https://www.instagram.com/nanae_service/reel/DYM1hheSJVm/",
+  "https://www.instagram.com/enes_seker/reel/DXsGMtNDKP4/",
+  "https://www.instagram.com/enes_seker/reel/DXbco_SDE_s/",
+  "https://www.instagram.com/enes_seker/reel/DXfGWoZjOZv/",
 ];
 
-const TESTIMONIALS = [
-  {
-    name: "Sarah M.",
-    role: "Büroleitung, Hamburg",
-    initials: "S",
-    quote:
-      "Pünktlich, freundlich und gründlich. Unser Büro sieht nach jedem Termin aus wie neu – und Nanae denkt mit.",
-  },
-  {
-    name: "Markus L.",
-    role: "Privatkunde, Altona",
-    initials: "M",
-    quote:
-      "Endlich jemand, dem ich vertrauen kann. Klare Absprachen, ehrliche Preise und wirklich saubere Fenster.",
-  },
-  {
-    name: "Dr. Anja K.",
-    role: "Praxisinhaberin, Eppendorf",
-    initials: "D",
-    quote:
-      "Unsere Praxis muss makellos sein. Nanae nimmt das genauso ernst wie wir. Kein Detail wird übersehen.",
-  },
-  {
-    name: "Lukas B.",
-    role: "Inhaber, Café Ostend",
-    initials: "L",
-    quote:
-      "Vom ersten Anruf bis zum letzten Wischzug – alles unkompliziert. Mein Café strahlt jeden Morgen.",
-  },
-  {
-    name: "Mira H.",
-    role: "Privatkundin, Rüttenscheid",
-    initials: "M",
-    quote:
-      "Nanae arbeitet so sorgfältig, als wäre es ihr eigenes Zuhause. Ich empfehle sie weiter ohne zu zögern.",
-  },
-];
+/**
+ * Convert any Instagram URL (reel / post / tv) into its public /embed/
+ * iframe URL. We append "captioned" so Instagram returns the modern,
+ * styled card with thumbnail + like/comment counts.
+ */
+function toEmbedUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    const parts = u.pathname.split("/").filter(Boolean);
+    let kind = "p";
+    let id: string | null = null;
+    for (let i = 0; i < parts.length; i++) {
+      if (["p", "reel", "tv"].includes(parts[i])) {
+        kind = parts[i];
+        id = parts[i + 1] ?? null;
+        break;
+      }
+    }
+    if (!id) return url;
+    // Plain /embed/ (no caption) — minimal Instagram chrome
+    return `https://www.instagram.com/${kind}/${id}/embed/`;
+  } catch {
+    return url;
+  }
+}
 
-function ReelCard({
-  url,
-  thumb,
-  caption,
-}: {
-  url: string;
-  thumb: string;
-  caption: string;
-}) {
+/**
+ * Renders the IG embed iframe inside a 9:16 frame, with the iframe pulled
+ * upward by 56px so the "@user · View profile" header is hidden, and made
+ * tall enough that the bottom likes/comments/caption strip is cropped off
+ * the bottom by the container's `overflow-hidden`.
+ *
+ *      ┌─────────────────────┐  ← container (9:16, overflow-hidden)
+ *      │  ··· hidden header  │
+ *  ────│    REEL VIDEO       │  ← only this is visible
+ *      │  ··· hidden footer  │
+ *      └─────────────────────┘
+ */
+/**
+ * Visible card shows ONLY the reel's video, with the play button centered.
+ *
+ * Method:
+ *  - 9 / 13 card aspect — slightly less tall than the full 9 / 16 video
+ *    aspect inside the embed, so the visible window sits comfortably
+ *    inside the video area with header above + footer below cropped.
+ *  - iframe is positioned absolutely at left:50% top:50% and translated
+ *    with -50%/-50% so its OWN centre snaps to the card's centre. That
+ *    means the play button (always at IG's video centre) lands at the
+ *    card's centre on every screen size, regardless of width.
+ *  - iframe is rendered ~140 % wide so IG's internal side letterboxing
+ *    sits beyond the card edges (clipped by overflow-hidden).
+ *  - iframe height is generous (160 % of card) so header & footer land
+ *    far outside the visible band.
+ */
+function ReelEmbed({ url }: { url: string }) {
   return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`Instagram Reel öffnen: ${caption}`}
-      className="group relative block aspect-[9/16] w-full overflow-hidden rounded-2xl bg-black shadow-card ring-1 ring-black/20 transition-transform duration-300 hover:-translate-y-1 hover:shadow-cardHover"
-    >
-      {/* Thumbnail */}
-      <Image
-        src={thumb}
-        alt={caption}
-        fill
-        quality={90}
-        sizes="(max-width: 640px) 70vw, (max-width: 1024px) 35vw, 240px"
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+    <div className="relative aspect-[9/13] w-full overflow-hidden rounded-2xl bg-black shadow-card ring-1 ring-black/10">
+      <iframe
+        src={toEmbedUrl(url)}
+        title={`Instagram Reel ${url}`}
+        loading="lazy"
+        scrolling="no"
+        allow="autoplay; encrypted-media; picture-in-picture; web-share"
+        allowFullScreen
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-0"
+        style={{
+          width: "140%",
+          height: "160%",
+        }}
       />
-
-      {/* Dark gradient overlay for text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/10 to-black/80" />
-
-      {/* Header — profile chip */}
-      <div className="absolute left-3 right-3 top-3 flex items-center gap-2">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand text-[10px] font-extrabold text-white ring-2 ring-white/80">
-          N
-        </div>
-        <div className="min-w-0 leading-tight">
-          <div className="truncate text-[12px] font-bold text-white">
-            @nanae_service
-          </div>
-          <div className="truncate text-[10px] text-white/75">Reel</div>
-        </div>
-      </div>
-
-      {/* Centered play button — Instagram brand gradient */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div
-          className="flex h-14 w-14 items-center justify-center rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.45)] ring-[3px] ring-white/20 transition-transform duration-300 group-hover:scale-110 sm:h-16 sm:w-16"
-          style={{
-            background:
-              "linear-gradient(135deg, #FEDA77 0%, #F58529 25%, #DD2A7B 55%, #8134AF 80%, #515BD4 100%)",
-          }}
-        >
-          <Play
-            className="ml-1 h-6 w-6 text-white sm:h-7 sm:w-7"
-            fill="white"
-            strokeWidth={0}
-          />
-        </div>
-      </div>
-
-      {/* Bottom caption */}
-      <div className="absolute inset-x-3 bottom-3">
-        <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
-          {caption}
-        </p>
-        <div className="mt-1 inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-white/80">
-          Auf Instagram ansehen
-          <ArrowRight className="h-3 w-3" />
-        </div>
-      </div>
-    </a>
+      {/* Safety mask — guarantees no footer pixels leak at the bottom */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2 bg-black" />
+    </div>
   );
 }
 
 export function InstagramTestimonials() {
   const [mounted, setMounted] = useState(false);
+  const [reels, setReels] = useState<string[]>(FALLBACK_REELS);
+
   useEffect(() => {
     setMounted(true);
+    // Auto-update: pull the latest reels from /api/ig-reels.
+    // Falls back silently to FALLBACK_REELS if the API isn't configured.
+    let cancelled = false;
+    fetch("/api/ig-reels")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.reels) && data.reels.length) {
+          setReels(data.reels);
+        }
+      })
+      .catch(() => {
+        // ignore — fallback already in state
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -226,118 +184,68 @@ export function InstagramTestimonials() {
         </div>
       </div>
 
-      {/* Reels strip — dark band with custom preview cards */}
+      {/* Real Instagram embed iframes */}
       <div className="mt-12 bg-ink py-10 sm:py-14">
         <div className="container-x">
-          {/* Desktop / tablet grid */}
-          <div className="hidden grid-cols-6 gap-3 sm:grid lg:gap-4">
-            {IG_REELS.map((reel) => (
-              <ReelCard key={reel.url} {...reel} />
-            ))}
-          </div>
+          {mounted && (
+            <>
+              {/* Desktop / tablet — flush 4-up row */}
+              <div className="hidden sm:block">
+                <Swiper
+                  modules={[Autoplay, Pagination]}
+                  slidesPerView={2}
+                  spaceBetween={4}
+                  loop={reels.length > 1}
+                  autoplay={{
+                    delay: 7000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                  }}
+                  pagination={{ clickable: true }}
+                  breakpoints={{
+                    768: { slidesPerView: 3, spaceBetween: 4 },
+                    1024: { slidesPerView: 4, spaceBetween: 4 },
+                    1280: { slidesPerView: 4, spaceBetween: 6 },
+                  }}
+                  className="instagram-swiper !pb-12"
+                >
+                  {reels.map((url) => (
+                    <SwiperSlide key={url} className="!h-auto">
+                      <ReelEmbed url={url} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
 
-          {/* Mobile slider */}
-          <div className="instagram-swiper sm:hidden">
-            {mounted && (
-              <Swiper
-                modules={[Autoplay, Pagination]}
-                slidesPerView={1.4}
-                spaceBetween={14}
-                loop
-                autoplay={{
-                  delay: 4500,
-                  disableOnInteraction: false,
-                }}
-                pagination={{ clickable: true }}
-                centeredSlides
-                className="!pb-10"
-              >
-                {IG_REELS.map((reel) => (
-                  <SwiperSlide key={reel.url} className="!h-auto">
-                    <ReelCard {...reel} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
-          </div>
+              {/* Mobile — single reel */}
+              <div className="sm:hidden">
+                <Swiper
+                  modules={[Autoplay, Pagination]}
+                  slidesPerView={1}
+                  spaceBetween={0}
+                  loop
+                  autoplay={{ delay: 6000, disableOnInteraction: false }}
+                  pagination={{ clickable: true }}
+                  className="instagram-swiper !pb-10"
+                >
+                  {reels.map((url) => (
+                    <SwiperSlide key={url} className="!h-auto">
+                      <ReelEmbed url={url} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Testimonials slider */}
-      <div className="container-x mt-20">
-        <div className="flex flex-col items-center text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="pill"
-          >
-            Stimmen
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-ink sm:text-4xl md:text-[40px]"
-          >
-            Was Kund:innen über meine Arbeit sagen.
-          </motion.h2>
+      {/* Testimonials slider — temporarily deactivated. */}
+      {false && (
+        <div className="container-x mt-20">
+          <p className="text-center text-ink-muted">Stimmen kommen bald.</p>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.6 }}
-          className="testimonials-swiper mt-10"
-        >
-          <Swiper
-            modules={[Autoplay, Pagination]}
-            slidesPerView={1}
-            spaceBetween={20}
-            loop
-            autoplay={{
-              delay: 4500,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            pagination={{ clickable: true }}
-            breakpoints={{
-              640: { slidesPerView: 2, spaceBetween: 20 },
-              1024: { slidesPerView: 3, spaceBetween: 24 },
-            }}
-            className="!pb-12"
-          >
-            {TESTIMONIALS.map((t) => (
-              <SwiperSlide key={t.name} className="!h-auto">
-                <div className="card-base h-full p-7 ring-1 ring-ink-200/50 hover:-translate-y-1 hover:shadow-cardHover">
-                  <div className="flex gap-1 text-brand">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <Star key={j} className="h-4 w-4" fill="currentColor" />
-                    ))}
-                  </div>
-                  <p className="mt-5 text-[15px] leading-relaxed text-ink">
-                    &bdquo;{t.quote}&ldquo;
-                  </p>
-                  <div className="mt-7 flex items-center gap-3 border-t border-ink-200/60 pt-5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-light text-sm font-bold text-brand">
-                      {t.initials}
-                    </div>
-                    <div className="leading-tight">
-                      <div className="text-sm font-semibold text-ink">
-                        {t.name}
-                      </div>
-                      <div className="text-xs text-ink-muted">{t.role}</div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </motion.div>
-      </div>
+      )}
     </section>
   );
 }
