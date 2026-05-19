@@ -28,14 +28,14 @@ export function About() {
       {/*
         Layout strategy
         ───────────────
-        Mobile (single column, flex):
+        Mobile (single column):
           1. Pill + headline + paragraph
           2. Image with quote overlay
           3. Feature cards
 
         Desktop (≥ lg, two columns):
-          • Left column   → Image with quote overlay (full height, row-span-2)
-          • Right column  → Intro (pill + h2 + p) on top, feature cards below
+          • Left column   → Image with quote overlay (row-span-2)
+          • Right column  → Intro (pill + h2 + p) on top, features below
       */}
       <div className="container-x grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-20">
         {/* 1. Intro text — mobile order 1, desktop top-right */}
@@ -75,16 +75,15 @@ export function About() {
           </motion.p>
         </div>
 
-        {/* 2. Image with quote overlay — mobile order 2, desktop left column,
-              spanning both grid rows so it sits beside intro + features. */}
+        {/* 2. Image with quote overlay */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative order-2 lg:order-1 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-center"
+          className="relative order-2 mx-auto w-full max-w-[520px] lg:order-1 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:self-center"
         >
-          <div className="relative aspect-[5/6] w-full max-w-[520px] overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
+          <div className="relative aspect-[5/6] w-full overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
             <Image
               src="/images/brand/03-window-squeegee.png"
               alt="Nanae bei der Fensterreinigung mit Abzieher"

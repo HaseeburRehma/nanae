@@ -121,6 +121,23 @@ body {
   border-radius: 9999px !important;
 }
 
+/* About section image slider — white dots on the photo */
+.about-swiper .swiper-pagination {
+  bottom: 14px !important;
+}
+.about-swiper .swiper-pagination-bullet {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+  opacity: 1 !important;
+  width: 7px !important;
+  height: 7px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+.about-swiper .swiper-pagination-bullet-active {
+  background-color: #ffffff !important;
+  width: 22px !important;
+  border-radius: 9999px !important;
+}
+
 /* Instagram embed slider — dark dots on light background */
 .instagram-swiper .swiper-pagination,
 .testimonials-swiper .swiper-pagination {
