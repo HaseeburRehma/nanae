@@ -11,15 +11,15 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const HERO_IMAGES = [
-  // 1. First slide — back-view window cleaning with city street
-  {
-    src: "/images/brand/new-01.png",
-    alt: "Nanae bei der Fensterreinigung – Blick auf die Straße",
-  },
-  // 2. Treppenhaus — Nanae auf der Treppe
+  // 1. Treppenhaus — Nanae auf der Treppe mit Eimer
   {
     src: "/images/brand/new-10.png",
     alt: "Nanae bei der Treppenhausreinigung mit Eimer",
+  },
+  // 2. Back-view window cleaning with city street
+  {
+    src: "/images/brand/new-01.png",
+    alt: "Nanae bei der Fensterreinigung – Blick auf die Straße",
   },
   // 3. Window cleaning side view with brick buildings
   {

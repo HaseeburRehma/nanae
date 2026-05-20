@@ -85,8 +85,8 @@ export function About() {
         >
           <div className="relative aspect-[5/6] w-full overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
             <Image
-              src="/images/brand/new-01.png"
-              alt="Nanae bei der Fensterreinigung – Blick auf die Straße"
+              src="/images/brand/new-12.png"
+              alt="Nanae bei der Küchenreinigung – Edelstahl-Arbeitsplatte"
               fill
               quality={95}
               sizes="(max-width: 1024px) 100vw, 520px"
@@ -100,9 +100,6 @@ export function About() {
             <p className="mt-2 text-sm font-medium leading-relaxed text-ink sm:text-[15px]">
               Ich tue genau das, was ich versprochen habe – nicht weniger, nicht
               mehr.
-            </p>
-            <p className="mt-3 text-xs text-ink-muted">
-              Foto: Nanae · echtes Bild
             </p>
           </div>
         </motion.div>
