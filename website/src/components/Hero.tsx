@@ -11,25 +11,30 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const HERO_IMAGES = [
+  // 1. First slide — back-view window cleaning with city street
   {
-    src: "/images/brand/01-mop-office-white.png",
-    alt: "Nanae wischt einen Büroboden – professionelle Büroreinigung",
+    src: "/images/brand/new-01.png",
+    alt: "Nanae bei der Fensterreinigung – Blick auf die Straße",
   },
+  // 2. Treppenhaus — Nanae auf der Treppe
   {
-    src: "/images/brand/10-vacuum-office-blue.png",
+    src: "/images/brand/new-10.png",
+    alt: "Nanae bei der Treppenhausreinigung mit Eimer",
+  },
+  // 3. Window cleaning side view with brick buildings
+  {
+    src: "/images/brand/new-04.png",
+    alt: "Nanae beim Fensterputzen mit Abzieher in Essen",
+  },
+  // 4. Office vacuuming
+  {
+    src: "/images/brand/new-06.png",
     alt: "Nanae beim Staubsaugen im Büro",
   },
+  // 5. Mopping
   {
-    src: "/images/brand/03-window-squeegee.png",
-    alt: "Streifenfreie Fensterreinigung mit Abzieher",
-  },
-  {
-    src: "/images/brand/09-medical-chairs.png",
-    alt: "Hygienische Reinigung im Wartezimmer einer Praxis",
-  },
-  {
-    src: "/images/brand/05-stairwell-mop.png",
-    alt: "Treppenhausreinigung – sauberer Empfang",
+    src: "/images/brand/new-16.png",
+    alt: "Nanae beim Wischen im Büro",
   },
 ];
 

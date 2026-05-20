@@ -85,8 +85,8 @@ export function About() {
         >
           <div className="relative aspect-[5/6] w-full overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
             <Image
-              src="/images/brand/03-window-squeegee.png"
-              alt="Nanae bei der Fensterreinigung mit Abzieher"
+              src="/images/brand/new-01.png"
+              alt="Nanae bei der Fensterreinigung – Blick auf die Straße"
               fill
               quality={95}
               sizes="(max-width: 1024px) 100vw, 520px"

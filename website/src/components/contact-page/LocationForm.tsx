@@ -117,8 +117,8 @@ export function LocationForm() {
             className="relative aspect-[4/5] w-full overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40 sm:aspect-[5/4] lg:aspect-[4/5]"
           >
             <Image
-              src="/images/brand/02-mop-office-blue.png"
-              alt="Nanae bei der Büroreinigung in Essen"
+              src="/images/brand/new-13.png"
+              alt="Nanae beim Reinigen einer Konferenztisch-Oberfläche in Essen"
               fill
               quality={95}
               priority
