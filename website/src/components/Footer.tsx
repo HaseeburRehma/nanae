@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Instagram } from "lucide-react";
+import { TylotechCredit } from "@/components/TylotechCredit";
 
 const LEISTUNGEN = [
   "Büroreinigung",
@@ -137,17 +138,20 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-ink-200/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-ink-200/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-ink-muted">
             © 2026 Nanae · Reinigungsservice. Alle Rechte vorbehalten.
           </p>
-          <div className="flex gap-6 text-xs text-ink-muted">
-            <a href="/impressum" className="hover:text-brand">
-              Impressum
-            </a>
-            <a href="/datenschutz" className="hover:text-brand">
-              Datenschutz
-            </a>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <div className="flex gap-6 text-xs text-ink-muted">
+              <a href="/impressum" className="hover:text-brand">
+                Impressum
+              </a>
+              <a href="/datenschutz" className="hover:text-brand">
+                Datenschutz
+              </a>
+            </div>
+            <TylotechCredit />
           </div>
         </div>
       </div>
