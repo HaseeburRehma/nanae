@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -10,6 +11,7 @@ const inter = Inter({
 });
 
 const SITE_URL = "https://nanae.de";
+const GTM_ID = "GTM-NGDBX44L";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -39,6 +41,10 @@ export const metadata: Metadata = {
   creator: "Nanae Reinigungsservice",
   publisher: "Nanae Reinigungsservice",
   alternates: { canonical: "/" },
+  // Google Search Console domain ownership
+  verification: {
+    google: "6sgoqD544HNnn3SwIRR0ydZct9huHopt45hwqfiFTGA",
+  },
   openGraph: {
     type: "website",
     locale: "de_DE",
@@ -126,11 +132,43 @@ export default function RootLayout({
 
   return (
     <html lang="de" className={inter.variable}>
+      <head>
+        {/*
+          Google Tag Manager — loaded as high in <head> as possible.
+          `beforeInteractive` would block render; `afterInteractive` is the
+          recommended strategy for analytics scripts in Next 14 App Router.
+        */}
+        <Script
+          id="gtm-base"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_ID}');
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
+        {/* Google Tag Manager (noscript) — immediately after <body> opens */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+
+        {/* LocalBusiness structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+
         {children}
       </body>
     </html>
