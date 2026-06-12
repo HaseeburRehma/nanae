@@ -43,7 +43,7 @@ export function Footer() {
             />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-muted">
               Reinigungsservice mit Gesicht. Persönlich, ehrlich, vor Ort in
-              Hamburg und Umgebung.
+              Essen und Umgebung.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL.map(({ Icon, href, label }) => (
