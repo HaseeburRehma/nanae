@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     siteName: "Nanae Reinigungsservice",
     images: [
       {
-        url: "/images/brand/new-04.png",
+        url: "/images/brand/nanae-window-side.jpg",
         width: 1200,
         height: 800,
         alt: "Nanae Reinigungsservice – professionelle Büroreinigung in Essen",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
       "Nanae Reinigungsservice Essen – ehrlich, zuverlässig, persönlich",
     description:
       "Reinigungsservice in Essen & Umgebung – Büro, Wohnung, Fenster, Praxis, Treppenhaus.",
-    images: ["/images/brand/new-04.png"],
+    images: ["/images/brand/nanae-window-side.jpg"],
   },
   robots: {
     index: true,
@@ -102,7 +102,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "Nanae Reinigungsservice",
-    image: `${SITE_URL}/images/brand/new-04.png`,
+    image: `${SITE_URL}/images/brand/nanae-window-side.jpg`,
     "@id": SITE_URL,
     url: SITE_URL,
     telephone: "+49 1521 0692909",

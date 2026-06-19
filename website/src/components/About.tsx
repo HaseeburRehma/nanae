@@ -55,8 +55,8 @@ export function About() {
         >
           <div className="relative aspect-[5/6] w-full overflow-hidden rounded-card shadow-[0_24px_60px_-30px_rgba(15,23,42,0.3)]">
             <Image
-              src="/images/brand/new-12.png"
-              alt="Nanae bei der Küchenreinigung – Edelstahl-Arbeitsplatte"
+              src="/images/brand/nanae-portrait.jpg"
+              alt="Nanae – persönlich und zuverlässig vor Ort"
               fill
               quality={95}
               sizes="(max-width: 1024px) 100vw, 520px"

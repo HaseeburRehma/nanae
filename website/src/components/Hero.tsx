@@ -11,30 +11,30 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const HERO_IMAGES = [
-  // 1. Treppenhaus — Nanae auf der Treppe mit Eimer
+  // 1. Nanae mit Eimer vor dem Objekt
   {
-    src: "/images/brand/new-10.png",
-    alt: "Nanae bei der Treppenhausreinigung mit Eimer",
+    src: "/images/brand/nanae-standing-bucket.jpg",
+    alt: "Nanae mit Reinigungseimer vor dem Einsatzort",
   },
-  // 2. Back-view window cleaning with city street
+  // 2. Fensterreinigung – Rückansicht mit Blick auf die Straße
   {
-    src: "/images/brand/new-01.png",
+    src: "/images/brand/nanae-window-back.jpg",
     alt: "Nanae bei der Fensterreinigung – Blick auf die Straße",
   },
-  // 3. Window cleaning side view with brick buildings
+  // 3. Fensterputzen Seitenansicht
   {
-    src: "/images/brand/new-04.png",
-    alt: "Nanae beim Fensterputzen mit Abzieher in Essen",
+    src: "/images/brand/nanae-window-side.jpg",
+    alt: "Nanae beim Fensterputzen in Essen",
   },
-  // 4. Office vacuuming
+  // 4. Reinigung des oberen Fensterrahmens
   {
-    src: "/images/brand/new-06.png",
-    alt: "Nanae beim Staubsaugen im Büro",
+    src: "/images/brand/nanae-window-reach.jpg",
+    alt: "Nanae bei der Reinigung des oberen Fensterrahmens",
   },
-  // 5. Mopping
+  // 5. Glasreinigung – konzentriert bei der Arbeit
   {
-    src: "/images/brand/new-16.png",
-    alt: "Nanae beim Wischen im Büro",
+    src: "/images/brand/nanae-window-bent.jpg",
+    alt: "Nanae bei der Glasreinigung",
   },
 ];
 

@@ -16,8 +16,10 @@ const payloadSchema = z.object({
   preferredDate: z.string().trim().optional().or(z.literal("")),
   notes: z.string().trim().optional().or(z.literal("")),
   message: z.string().trim().optional().or(z.literal("")),
-  // honeypot — humans leave it empty
-  company: z.string().trim().max(0).optional().default(""),
+  // honeypot — humans leave it empty. Accept any value here so the
+  // silent-accept handling below can run; a non-empty value is treated
+  // as a bot and dropped without sending (see check after parsing).
+  company: z.string().trim().optional().default(""),
 });
 
 type Payload = z.infer<typeof payloadSchema>;

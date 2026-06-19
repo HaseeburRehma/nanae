@@ -43,23 +43,23 @@ export function LocationForm() {
         </div>
 
         {/* Split row */}
-        <div className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-7">
+        <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-7">
           {/* Image (location card is baked into the image) */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative aspect-[872/728] w-full overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40"
+            className="relative min-h-[420px] w-full overflow-hidden rounded-card shadow-card ring-1 ring-ink-200/40 lg:min-h-0 lg:h-full"
           >
             <Image
-              src="/images/brand/new-13.png"
-              alt="Nanae beim Reinigen einer Konferenztisch-Oberfläche in Essen"
+              src="/images/brand/nanae-bucket-portrait.jpg"
+              alt="Nanae mit Reinigungseimer im Einsatz in Essen"
               fill
               quality={95}
               priority
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 620px"
-              className="object-cover object-center"
+              className="object-cover object-[center_top]"
             />
           </motion.div>
 
