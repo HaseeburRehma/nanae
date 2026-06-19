@@ -105,17 +105,20 @@ export function Hero() {
             animate="visible"
             variants={fadeUp}
             custom={3}
-            className="mt-7 flex flex-wrap items-center gap-3 sm:mt-8"
+            className="mt-7 flex flex-nowrap items-stretch gap-2 sm:mt-8 sm:flex-wrap sm:items-center sm:gap-3"
           >
-            <a href="/kontakt" className="btn-primary">
+            <a
+              href="/kontakt"
+              className="btn-primary flex-1 whitespace-nowrap px-4 text-[13px] sm:flex-none sm:px-6 sm:text-sm"
+            >
               Jetzt Anfrage senden
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 shrink-0" />
             </a>
             <a
               href="https://wa.me/4915210692909"
               target="_blank"
               rel="noreferrer"
-              className="btn-secondary"
+              className="btn-secondary flex-1 whitespace-nowrap px-4 text-[13px] sm:flex-none sm:px-6 sm:text-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-pulseDot rounded-full bg-success opacity-75" />

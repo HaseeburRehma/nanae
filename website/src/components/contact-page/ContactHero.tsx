@@ -22,7 +22,7 @@ export function ContactHero() {
           priority
           quality={95}
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-[center_38%]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/35 via-ink/45 to-ink/55" />
 
